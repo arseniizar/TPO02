@@ -16,7 +16,7 @@ public class DefaultCaseFormatter implements IWordFormatter {
     @Override
     public List<String> formatWords(List<Entry> entries) {
         List<String> formatted = new ArrayList<>();
-        formatted.add("||word|| en | pl | de");
+        formatted.add(" en | pl | de");
         for (Entry entry : entries) {
             formatted.add(formatWord(entry));
         }
@@ -25,7 +25,7 @@ public class DefaultCaseFormatter implements IWordFormatter {
 
     @Override
     public String formatWord(Entry entry) {
-        return "|" + entry.getEnName() + "| " + entry.getPlName() + " | " + entry.getDeName();
+        return entry.getEnName() + "| " + entry.getPlName() + " | " + entry.getDeName();
     }
 
 }

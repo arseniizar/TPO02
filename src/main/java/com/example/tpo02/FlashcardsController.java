@@ -3,7 +3,6 @@ package com.example.tpo02;
 import com.example.tpo02.profiles.IWordFormatter;
 import org.springframework.stereotype.Controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -23,15 +22,25 @@ public class FlashcardsController {
         this.scanner = scanner;
     }
 
+    private void addEntriesToRepository() {
+        List<Entry> parsedEntries = fileService.parseCSVFile();
+        for (Entry entry : parsedEntries) {
+            entryRepository.addEntry(entry);
+        }
+    }
+
     public void run() {
+        addEntriesToRepository();
         boolean exit = false;
         while (!exit) {
             System.out.println("""
+                     ------------------------------------------
                      |1| Add word
                      |2| Display words
                      |3| Test
                      |4| Exit
                      |?| Make a choice:
+                     ------------------------------------------
                     """);
             int chosenOption = scanner.nextInt();
             scanner.nextLine();
@@ -43,7 +52,7 @@ public class FlashcardsController {
                     displayWordEntries();
                     break;
                 case 3:
-                    testUser();
+                    runTest();
                     break;
                 case 4:
                     exit = true;
@@ -65,6 +74,7 @@ public class FlashcardsController {
         String german = scanEntry("German");
         Entry entry = new Entry(english, polish, german);
         entryRepository.addEntry(entry);
+        fileService.saveToFile(entry);
         System.out.println("|INFO| Word added successfully!");
     }
 
@@ -77,16 +87,16 @@ public class FlashcardsController {
         }
     }
 
-    private void testUser() {
+    private void runTest() {
         List<Entry> entries = entryRepository.getAllEntries();
         if (entries.isEmpty()) {
-            System.out.println("No words available to test.");
+            System.out.println("|INFO| No words are present in repository.");
             return;
         }
         Random random = new Random();
         Entry entry = entries.get(random.nextInt(entries.size()));
-        System.out.println("Translate the following word into Polish and German:");
-        System.out.println("Word: " + entry.getEnName());
+        System.out.println("|?| Translate the following word into Polish and German:");
+        System.out.println("|!| Word: " + entry.getEnName());
         System.out.print("Polish: ");
         String polishAnswer = scanner.nextLine().trim();
         System.out.print("German: ");
@@ -94,9 +104,9 @@ public class FlashcardsController {
         boolean correctPolish = polishAnswer.equalsIgnoreCase(entry.getPlName());
         boolean correctGerman = germanAnswer.equalsIgnoreCase(entry.getDeName());
         if (correctPolish && correctGerman) {
-            System.out.println("Correct!");
+            System.out.println("|!| Correct!");
         } else {
-            System.out.println("Incorrect. The correct answers are:");
+            System.out.println("|!| Incorrect. The correct answers are:");
             System.out.println("Polish: " + entry.getPlName());
             System.out.println("German: " + entry.getDeName());
         }

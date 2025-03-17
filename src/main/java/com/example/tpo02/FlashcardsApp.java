@@ -19,17 +19,19 @@ public class FlashcardsApp {
 
     private static void chooseProfile(Scanner tempScanner) {
         System.out.println("""
+                ------------------------------------------
                 |!| Select display profile:
                 |1| Default
                 |2| Uppercase
                 |3| Lowercase
                 |?| Type your option:
+                ------------------------------------------
                 """);
         String chosenOption = tempScanner.nextLine();
         String profile = switch (chosenOption) {
-            case "1" -> "default";
-            case "2" -> "upper";
-            case "3" -> "lower";
+            case "1" -> "Default";
+            case "2" -> "Upper";
+            case "3" -> "Lower";
             default -> throw new IllegalStateException("|ERROR| Unexpected value: " + chosenOption);
         };
         System.setProperty("spring.profiles.active", profile);

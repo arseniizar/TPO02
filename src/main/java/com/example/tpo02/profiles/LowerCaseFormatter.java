@@ -16,7 +16,7 @@ public class LowerCaseFormatter implements IWordFormatter {
     @Override
     public List<String> formatWords(List<Entry> entries) {
         List<String> formatted = new ArrayList<>();
-        formatted.add("||word|| en | pl | de".toLowerCase());
+        formatted.add("en | pl | de".toLowerCase());
         for (Entry entry : entries) {
             formatted.add(formatWord(entry));
         }
@@ -25,6 +25,6 @@ public class LowerCaseFormatter implements IWordFormatter {
 
     @Override
     public String formatWord(Entry entry) {
-        return ("|" + entry.getEnName() + "| " + entry.getPlName() + " | " + entry.getDeName()).toLowerCase();
+        return (entry.getEnName() + "| " + entry.getPlName() + " | " + entry.getDeName()).toLowerCase();
     }
 }
