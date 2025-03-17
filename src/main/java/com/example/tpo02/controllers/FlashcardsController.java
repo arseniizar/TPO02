@@ -1,6 +1,9 @@
-package com.example.tpo02;
+package com.example.tpo02.controllers;
 
+import com.example.tpo02.entities.Entry;
+import com.example.tpo02.repositories.EntryRepository;
 import com.example.tpo02.profiles.IWordFormatter;
+import com.example.tpo02.services.FileServiceImpl;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -10,20 +13,20 @@ import java.util.Scanner;
 @Controller
 public class FlashcardsController {
     private final EntryRepository entryRepository;
-    private final FileService fileService;
+    private final FileServiceImpl fileServiceImpl;
     private final IWordFormatter wordFormatter;
     private final Scanner scanner;
 
-    public FlashcardsController(EntryRepository entryRepository, FileService fileService,
+    public FlashcardsController(EntryRepository entryRepository, FileServiceImpl fileServiceImpl,
                                 IWordFormatter wordFormatter, Scanner scanner) {
         this.entryRepository = entryRepository;
-        this.fileService = fileService;
+        this.fileServiceImpl = fileServiceImpl;
         this.wordFormatter = wordFormatter;
         this.scanner = scanner;
     }
 
     private void addEntriesToRepository() {
-        List<Entry> parsedEntries = fileService.parseCSVFile();
+        List<Entry> parsedEntries = fileServiceImpl.parseCSVFile();
         for (Entry entry : parsedEntries) {
             entryRepository.addEntry(entry);
         }
@@ -74,7 +77,7 @@ public class FlashcardsController {
         String german = scanEntry("German");
         Entry entry = new Entry(english, polish, german);
         entryRepository.addEntry(entry);
-        fileService.saveToFile(entry);
+        fileServiceImpl.saveToFile(entry);
         System.out.println("|INFO| Word added successfully!");
     }
 

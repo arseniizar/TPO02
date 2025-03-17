@@ -1,5 +1,6 @@
-package com.example.tpo02;
+package com.example.tpo02.services;
 
+import com.example.tpo02.entities.Entry;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 
@@ -9,22 +10,15 @@ import java.util.List;
 
 @Service
 @ConfigurationProperties(prefix = "pl.edu.pja.tpo02")
-public class FileService {
-    private String filePath = "src/main/resources/words.csv";
+public class FileServiceImpl implements FileService {
+    private final String filePath = "src/main/resources/words.csv";
 
-    public String getFilePath() {
-        return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
-    }
-
-
+    @Override
     public void printSeparator() {
         System.out.println("----------------------------------------------");
     }
 
+    @Override
     public List<Entry> parseCSVFile() {
         List<Entry> parsedEntries = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -41,6 +35,7 @@ public class FileService {
         return parsedEntries;
     }
 
+    @Override
     public void saveToFile(Entry entry) {
         try (FileWriter writer = new FileWriter(filePath, true)) {
             String line = entry.getEnName() + "," + entry.getPlName() + "," + entry.getDeName() + "\n";

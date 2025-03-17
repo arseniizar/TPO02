@@ -1,4 +1,4 @@
-package com.example.tpo02;
+package com.example.tpo02.entities;
 
 public class Entry {
     private String enName;

@@ -1,5 +1,6 @@
 package com.example.tpo02;
 
+import com.example.tpo02.controllers.FlashcardsController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;

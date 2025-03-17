@@ -1,5 +1,6 @@
-package com.example.tpo02;
+package com.example.tpo02.repositories;
 
+import com.example.tpo02.entities.Entry;
 import org.springframework.stereotype.Component;
 
 import java.util.*;

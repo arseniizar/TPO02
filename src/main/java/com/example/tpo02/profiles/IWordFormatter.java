@@ -1,6 +1,6 @@
 package com.example.tpo02.profiles;
 
-import com.example.tpo02.Entry;
+import com.example.tpo02.entities.Entry;
 
 import java.util.List;
 
