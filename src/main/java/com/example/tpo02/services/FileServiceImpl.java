@@ -11,7 +11,15 @@ import java.util.List;
 @Service
 @ConfigurationProperties(prefix = "pl.edu.pja.tpo02")
 public class FileServiceImpl implements FileService {
-    private final String filePath = "src/main/resources/words.csv";
+    private String fileName;
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
     @Override
     public void printSeparator() {
@@ -21,7 +29,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public List<Entry> parseCSVFile() {
         List<Entry> parsedEntries = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
             br.readLine(); // skip labels row
             String line;
             while ((line = br.readLine()) != null) {
@@ -37,7 +45,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public void saveToFile(Entry entry) {
-        try (FileWriter writer = new FileWriter(filePath, true)) {
+        try (FileWriter writer = new FileWriter(fileName, true)) {
             String line = entry.getEnName() + "," + entry.getPlName() + "," + entry.getDeName() + "\n";
             writer.write(line);
         } catch (IOException e) {
