@@ -1,1 +1,13 @@
-spring.application.name=TPO02
+spring:
+  banner:
+    location: "banner"
+    charset: UTF-8
+  application:
+    name: Words Application
+  profiles:
+    active: default
+pl:
+  edu:
+    pja:
+      tpo02:
+        filename: "..\TPO02\\src\\main\\resources\\words.csv"
