@@ -1,13 +1,21 @@
 spring:
+  datasource:
+    url: jdbc:h2:file:./src/main/resources/data/mydb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
   banner:
-    location: "banner"
+    location: classpath:logo-app
     charset: UTF-8
   application:
     name: Words Application
   profiles:
     active: default
-pl:
-  edu:
-    pja:
-      tpo02:
-        filename: "..\\TPO02\\src\\main\\resources\\words.csv"
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console

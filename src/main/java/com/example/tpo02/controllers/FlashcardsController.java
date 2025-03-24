@@ -1,39 +1,23 @@
 package com.example.tpo02.controllers;
 
 import com.example.tpo02.entities.Entry;
-import com.example.tpo02.repositories.EntryRepository;
-import com.example.tpo02.profiles.IWordFormatter;
 import com.example.tpo02.services.FileServiceImpl;
 import org.springframework.stereotype.Controller;
 
-import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 
 @Controller
 public class FlashcardsController {
-    private final EntryRepository entryRepository;
     private final FileServiceImpl fileServiceImpl;
-    private final IWordFormatter wordFormatter;
     private final Scanner scanner;
 
-    public FlashcardsController(EntryRepository entryRepository, FileServiceImpl fileServiceImpl,
-                                IWordFormatter wordFormatter, Scanner scanner) {
-        this.entryRepository = entryRepository;
+    public FlashcardsController(FileServiceImpl fileServiceImpl,
+                                Scanner scanner) {
         this.fileServiceImpl = fileServiceImpl;
-        this.wordFormatter = wordFormatter;
         this.scanner = scanner;
     }
 
-    private void addEntriesToRepository() {
-        List<Entry> parsedEntries = fileServiceImpl.parseCSVFile();
-        for (Entry entry : parsedEntries) {
-            entryRepository.addEntry(entry);
-        }
-    }
-
     public void run() {
-        addEntriesToRepository();
         boolean exit = false;
         while (!exit) {
             System.out.println("""
@@ -75,43 +59,33 @@ public class FlashcardsController {
         String english = scanEntry("English");
         String polish = scanEntry("Polish");
         String german = scanEntry("German");
-        Entry entry = new Entry(english, polish, german);
-        entryRepository.addEntry(entry);
-        fileServiceImpl.saveToFile(entry);
-        System.out.println("|INFO| Word added successfully!");
+        if (english.isEmpty() || polish.isEmpty() || german.isEmpty()) {
+            System.out.println("|ERROR| Do not type an empty string");
+            return;
+        }
+        fileServiceImpl.addWordEntry(english, polish, german);
     }
 
     private void displayWordEntries() {
-        List<Entry> entries = entryRepository.getAllEntries();
-        // each string is 3 words in respective languages
-        List<String> formattedEntries = wordFormatter.formatWords(entries);
-        for (String formattedEntry : formattedEntries) {
-            System.out.println(formattedEntry);
-        }
+        fileServiceImpl.displayWordEntries();
     }
 
     private void runTest() {
-        List<Entry> entries = entryRepository.getAllEntries();
-        if (entries.isEmpty()) {
+        if (fileServiceImpl.isRepositoryEmpty()) {
             System.out.println("|INFO| No words are present in repository.");
             return;
         }
-        Random random = new Random();
-        Entry entry = entries.get(random.nextInt(entries.size()));
+
+        Entry randomEntry = fileServiceImpl.getRandomEntry();
         System.out.println("|?| Translate the following word into Polish and German:");
-        System.out.println("|!| Word: " + entry.getEnName());
+        System.out.println("English: " + randomEntry.getEnName());
+
         System.out.print("Polish: ");
-        String polishAnswer = scanner.nextLine().trim();
+        String polishInput = scanner.nextLine();
+
         System.out.print("German: ");
-        String germanAnswer = scanner.nextLine().trim();
-        boolean correctPolish = polishAnswer.equalsIgnoreCase(entry.getPlName());
-        boolean correctGerman = germanAnswer.equalsIgnoreCase(entry.getDeName());
-        if (correctPolish && correctGerman) {
-            System.out.println("|!| Correct!");
-        } else {
-            System.out.println("|!| Incorrect. The correct answers are:");
-            System.out.println("Polish: " + entry.getPlName());
-            System.out.println("German: " + entry.getDeName());
-        }
+        String germanInput = scanner.nextLine();
+
+        fileServiceImpl.runTest(polishInput, germanInput, randomEntry);
     }
 }

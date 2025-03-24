@@ -10,4 +10,16 @@ public interface FileService {
     abstract void saveToFile(Entry entry);
 
     abstract void printSeparator();
+
+    abstract void runTest(String polishAnswer, String germanAnswer, Entry entry);
+
+    abstract void addWordEntry(String english, String polish, String german);
+
+    abstract void displayWordEntries();
+
+    abstract void addParsedEntriesToRepository();
+
+    abstract boolean isRepositoryEmpty();
+
+    abstract Entry getRandomEntry();
 }

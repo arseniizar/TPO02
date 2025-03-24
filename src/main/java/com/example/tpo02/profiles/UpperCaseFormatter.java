@@ -1,14 +1,12 @@
 package com.example.tpo02.profiles;
 
 import com.example.tpo02.entities.Entry;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Primary
 @Component
 @Profile("Upper")
 public class UpperCaseFormatter implements IWordFormatter {
